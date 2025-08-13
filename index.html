@@ -1263,7 +1263,7 @@ body {
                 </div>
                 
                 <button id="checkout-button" class="w-full bg-black text-white py-3 rounded mt-6 hover:bg-gray-800 transition">Proceed to Checkout</button>
-                <a href="#shop" class="block text-center mt-4 text-gray-600 hover:text-black transition">Continue Shopping</a>
+                <a href="#shop" id="continue-shopping-cart" class="block text-center mt-4 text-gray-600 hover:text-black transition">Continue Shopping</a>
             </div>
         </div>
     </div>
@@ -1310,8 +1310,8 @@ body {
                                     <p class="error-message" id="city-error">Please enter your city</p>
                                 </div>
                                 <div>
-                                    <label class="block mb-1">GPS</label>
-                                    <input type="text" name="gps" placeholder="JK-409-XXXX" class="w-full border border-gray-300 rounded px-4 py-2 focus:outline-none focus:ring-1 focus:ring-gold-500">
+                                    <label class="block mb-1">Digital Address</label>
+                                    <input type="text" name="gps" id="gps-input" placeholder="GA-302-XXXX" maxlength="11" class="w-full border border-gray-300 rounded px-4 py-2 focus:outline-none focus:ring-1 focus:ring-gold-500">
                                 </div>
                             </div>
                             <div>
@@ -1437,6 +1437,18 @@ body {
             toast.classList.remove('show');
         }, 3000);
     }
+    // Close cart when clicking "Continue Shopping"
+document.getElementById('continue-shopping-cart')?.addEventListener('click', function(e) {
+    e.preventDefault(); // Prevent default link behavior
+    cartSidebar.classList.add('translate-x-full'); // Close cart
+    document.body.style.overflow = ''; // Re-enable scrolling
+    
+    // Optional: Scroll to shop section
+    const shopSection = document.getElementById('shop');
+    if (shopSection) {
+        shopSection.scrollIntoView({ behavior: 'smooth' });
+    }
+});
 
     // Cart Functionality
     const cartButton = document.getElementById('cart-button');
@@ -2345,6 +2357,55 @@ if (mobileFilterToggle && filterSection) {
         }
     });
 }
+
+
+// GPS Input Formatting
+const gpsInput = document.getElementById('gps-input');
+
+if (gpsInput) {
+    gpsInput.addEventListener('input', function(e) {
+        let value = this.value.replace(/-/g, ''); // Remove existing hyphens
+        let newValue = '';
+        
+        // First 2 characters (letters only)
+        if (value.length > 0) {
+            newValue = value.substr(0, 2).replace(/[^a-zA-Z]/g, '').toUpperCase();
+        }
+        
+        // Add hyphen after 2 characters
+        if (value.length > 2) {
+            newValue += '-' + value.substr(2, 3).replace(/[^0-9]/g, '');
+        }
+        
+        // Add hyphen after 5 characters
+        if (value.length > 5) {
+            newValue += '-' + value.substr(5, 4).replace(/[^0-9]/g, '');
+        }
+        
+        // Update the input value
+        this.value = newValue;
+    });
+
+    // Prevent invalid pasting
+    gpsInput.addEventListener('paste', function(e) {
+        e.preventDefault();
+        const pasteData = e.clipboardData.getData('text/plain');
+        const cleanData = pasteData.replace(/[^a-zA-Z0-9]/g, '');
+        
+        if (cleanData.length >= 2) {
+            const letters = cleanData.substr(0, 2).replace(/[^a-zA-Z]/g, '').toUpperCase();
+            const numbers = cleanData.substr(2).replace(/[^0-9]/g, '');
+            
+            let formatted = letters;
+            if (numbers.length > 0) formatted += '-' + numbers.substr(0, 3);
+            if (numbers.length > 3) formatted += '-' + numbers.substr(3, 4);
+            
+            this.value = formatted;
+        }
+    });
+}
+
+
     </script>
 </body>
 </html>
