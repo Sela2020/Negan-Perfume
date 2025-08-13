@@ -1,0 +1,2220 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Luxury Scents | Premium Perfumes</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Poppins:wght@300;400;500;600&display=swap');
+
+        html {
+            scroll-behavior: smooth;
+        }
+        
+        body {
+            font-family: 'Poppins', sans-serif;
+            scroll-behavior: smooth;
+        }
+        
+        .hero {
+            background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url('https://images.unsplash.com/photo-1592945403244-b3fbafd7f539?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80');
+            background-size: cover;
+            background-position: center;
+        }
+        
+        .product-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+        }
+        
+        .filter-section {
+            transition: all 0.3s ease;
+        }
+        
+        .cart-item {
+            animation: fadeIn 0.3s ease-in-out;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .sale-badge {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: #D4AF37;
+            color: black;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        .size-filter.bg-gold-500 {
+            background-color: #D4AF37 !important;
+            color: black !important;
+        }
+
+        .filter-content:not(.hidden) {
+            display: block;
+        }
+
+        .filter-content.hidden {
+            display: none;
+        }
+
+        #cart-count {
+            transition: all 0.2s ease;
+        }
+
+        #cart-count.bounce {
+            transform: scale(1.2);
+        }
+
+        /* New styles for product details */
+        .product-details {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease-out;
+        }
+        
+        .product-details.show {
+            max-height: 500px;
+            transition: max-height 0.5s ease-in;
+        }
+        
+        .show-more-btn {
+            transition: all 0.3s ease;
+        }
+        
+        .show-more-btn .fa-chevron-down {
+            transition: transform 0.3s ease;
+        }
+        
+        .show-more-btn.active .fa-chevron-down {
+            transform: rotate(180deg);
+        }
+        
+        /* Loading animation */
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+        
+        .animate-pulse {
+            animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+        }
+        
+        /* Mobile menu animation */
+        .mobile-menu {
+            transform: translateX(-100%);
+            transition: transform 0.3s ease-out;
+        }
+        
+        .mobile-menu.open {
+            transform: translateX(0);
+        }
+        
+        /* Cart bounce animation */
+        @keyframes bounce {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.2); }
+        }
+        
+        .bounce {
+            animation: bounce 0.5s;
+        }
+        
+        /* Product hover effect */
+        .product-image-container {
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .product-image {
+            transition: transform 0.5s ease;
+        }
+        
+        .product-card:hover .product-image {
+            transform: scale(1.05);
+        }
+        
+        /* Floating action button for mobile */
+        .fab {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: #D4AF37;
+            color: black;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+            z-index: 40;
+            transition: all 0.3s ease;
+        }
+        
+        .fab:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.3);
+        }
+        
+        /* Toast notification */
+        .toast {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(0, 0, 0, 0.8);
+            color: white;
+            padding: 12px 24px;
+            border-radius: 4px;
+            z-index: 50;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        
+        .toast.show {
+            opacity: 1;
+        }
+        
+        /* Form validation */
+        .error-message {
+            color: #ef4444;
+            font-size: 0.875rem;
+            margin-top: 0.25rem;
+            display: none;
+        }
+        
+        .input-error {
+            border-color: #ef4444 !important;
+        }
+
+        #cart-count{
+            color: rgb(140, 255, 184);
+            background-color: rgb(49, 42, 255);
+
+        }
+
+        #empty-cart-message {
+    transition: all 0.3s ease;
+}
+
+#empty-cart-message i {
+    color: #D4AF37;
+    margin-bottom: 1rem;
+}
+
+#empty-cart-message p {
+    font-size: 1.125rem;
+    margin-bottom: 1.5rem;
+}
+
+    </style>
+</head>
+<body class="bg-gray-50">
+    <!-- Header/Navigation -->
+    <header class="bg-black text-white sticky top-0 z-50 shadow-lg">
+        <div class="container mx-auto px-4 py-3">
+            <div class="flex justify-between items-center">
+                <div class="flex items-center space-x-4">
+                    <button id="mobile-menu-button" class="md:hidden text-white focus:outline-none">
+                        <i class="fas fa-bars text-xl"></i>
+                    </button>
+                    <a href="#" class="text-2xl font-bold font-serif tracking-wider">
+                        <span class="text-gold-500">LUXURY</span> SCENTS
+                    </a>
+                </div>
+                
+                <nav class="hidden md:flex space-x-8">
+                    <a href="#" class="hover:text-gold-400 transition">Home</a>
+                    <a href="#shop" class="hover:text-gold-400 transition">Shop</a>
+                    <a href="#collections" class="hover:text-gold-400 transition">Collections</a>
+                    <a href="#about" class="hover:text-gold-400 transition">About</a>
+                    <a href="#contact" class="hover:text-gold-400 transition">Contact</a>
+                </nav>
+                
+                <div class="flex items-center space-x-4">
+                    <button id="cart-button" class="relative">
+                        <i class="fas fa-shopping-cart text-xl"></i>
+                        <span id="cart-count" class="absolute -top-2 -right-2 bg-gold-500 text-black text-xs font-bold rounded-full h-5 w-5 flex items-center justify-center">0</span>
+                    </button>
+                    <button class="hidden md:block">
+                        <i class="fas fa-user text-xl"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Mobile Menu (off-canvas) -->
+    <div id="mobile-menu" class="mobile-menu fixed inset-y-0 left-0 w-64 bg-black text-white z-50 p-6 overflow-y-auto">
+        <div class="flex justify-between items-center mb-8">
+            <a href="#" class="text-2xl font-bold font-serif tracking-wider">
+                <span class="text-gold-500">LUXURY</span> SCENTS
+            </a>
+            <button id="close-mobile-menu" class="text-white">
+                <i class="fas fa-times text-xl"></i>
+            </button>
+        </div>
+        
+        <div class="flex flex-col space-y-6">
+            <a href="#" class="block py-2 hover:text-gold-400 transition">Home</a>
+            <a href="#shop" class="block py-2 hover:text-gold-400 transition">Shop</a>
+            <a href="#collections" class="block py-2 hover:text-gold-400 transition">Collections</a>
+            <a href="#about" class="block py-2 hover:text-gold-400 transition">About</a>
+            <a href="#contact" class="block py-2 hover:text-gold-400 transition">Contact</a>
+            <a href="#" class="block py-2 hover:text-gold-400 transition">Account</a>
+        </div>
+        
+        <div class="mt-8 pt-6 border-t border-gray-800">
+            <h3 class="font-bold mb-4">Connect With Us</h3>
+            <div class="flex space-x-4">
+                <a href="#" class="text-gray-400 hover:text-white transition">
+                    <i class="fab fa-facebook-f"></i>
+                </a>
+                <a href="#" class="text-gray-400 hover:text-white transition">
+                    <i class="fab fa-instagram"></i>
+                </a>
+                <a href="#" class="text-gray-400 hover:text-white transition">
+                    <i class="fab fa-twitter"></i>
+                </a>
+                <a href="#" class="text-gray-400 hover:text-white transition">
+                    <i class="fab fa-pinterest"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+    <div id="mobile-menu-overlay" class="fixed inset-0 bg-black bg-opacity-50 z-40 hidden"></div>
+
+    <!-- Floating Action Button (Mobile) -->
+    <div class="fab md:hidden" id="mobile-cart-button">
+        <i class="fas fa-shopping-cart text-xl"></i>
+        <span id="mobile-cart-count" class="absolute -top-1 -right-1 bg-black text-white text-xs font-bold rounded-full h-5 w-5 flex items-center justify-center">0</span>
+    </div>
+
+    <!-- Toast Notification -->
+    <div class="toast" id="toast">
+        <span id="toast-message">Item added to cart</span>
+    </div>
+
+    <!-- Hero Section -->
+    <section class="hero text-white py-20 md:py-32 flex items-center">
+        <div class="container mx-auto px-4 text-center">
+            <h1 class="text-4xl md:text-6xl font-serif font-bold mb-6 animate-fade-in">Discover Your Signature Scent</h1>
+            <p class="text-xl md:text-2xl mb-8 max-w-2xl mx-auto animate-fade-in delay-100">Luxury perfumes crafted with the finest ingredients for unforgettable moments</p>
+            <a href="#shop" class="bg-gold-500 hover:bg-gold-600 text-black font-bold py-3 px-8 rounded-full transition duration-300 inline-block animate-fade-in delay-200">Shop Now</a>
+        </div>
+    </section>
+
+    <!-- Categories -->
+    <section id="collections" class="py-16 bg-white">
+        <div class="container mx-auto px-4">
+            <h2 class="text-3xl font-serif font-bold text-center mb-12">Our Collections</h2>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div class="category-card relative overflow-hidden rounded-lg group">
+                    <div class="product-image-container">
+                        <img src="https://images.unsplash.com/photo-1595425964073-9b8436f1d7a5?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80" alt="Men's Perfumes" class="product-image w-full h-64 md:h-80 object-cover">
+                    </div>
+                    <div class="absolute inset-0 bg-black bg-opacity-40 flex items-center justify-center">
+                        <div class="text-center">
+                            <h3 class="text-2xl font-bold text-white mb-2">For Him</h3>
+                            <a href="#shop" class="text-white border border-white px-6 py-2 rounded-full hover:bg-white hover:text-black transition">Shop Men</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="category-card relative overflow-hidden rounded-lg group">
+                    <div class="product-image-container">
+                        <img src="https://images.unsplash.com/photo-1594035910387-f355283d0e72?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80" alt="Women's Perfumes" class="product-image w-full h-64 md:h-80 object-cover">
+                    </div>
+                    <div class="absolute inset-0 bg-black bg-opacity-40 flex items-center justify-center">
+                        <div class="text-center">
+                            <h3 class="text-2xl font-bold text-white mb-2">For Her</h3>
+                            <a href="#shop" class="text-white border border-white px-6 py-2 rounded-full hover:bg-white hover:text-black transition">Shop Women</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="category-card relative overflow-hidden rounded-lg group">
+                    <div class="product-image-container">
+                        <img src="https://images.unsplash.com/photo-1615634265067-24d7e1f5990a?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80" alt="Vintage Perfumes" class="product-image w-full h-64 md:h-80 object-cover">
+                    </div>
+                    <div class="absolute inset-0 bg-black bg-opacity-40 flex items-center justify-center">
+                        <div class="text-center">
+                            <h3 class="text-2xl font-bold text-white mb-2">Vintage</h3>
+                            <a href="#shop" class="text-white border border-white px-6 py-2 rounded-full hover:bg-white hover:text-black transition">Shop Vintage</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Shop Section -->
+    <section id="shop" class="py-16 bg-gray-50">
+        <div class="container mx-auto px-4">
+            <h2 class="text-3xl font-serif font-bold text-center mb-4">Our Luxury Collection</h2>
+            <p class="text-center text-gray-600 mb-12 max-w-2xl mx-auto">Discover our exquisite range of perfumes that capture the essence of luxury and elegance</p>
+            
+            <div class="flex flex-col md:flex-row gap-8">
+                <!-- Filters -->
+                <div class="w-full md:w-1/4">
+                    <div class="bg-white p-6 rounded-lg shadow-sm sticky top-24">
+                        <h3 class="font-bold text-lg mb-4">Filters</h3>
+                        
+                        <div class="mb-6">
+                            <h4 class="font-semibold mb-3 flex justify-between items-center cursor-pointer filter-toggle">
+                                <span>Categories</span>
+                                <i class="fas fa-chevron-down text-xs transform transition-transform duration-200"></i>
+                            </h4>
+                            <div class="filter-content space-y-2">
+                                <label class="flex items-center">
+                                    <input type="checkbox" class="category-filter form-checkbox text-gold-500" value="men" checked>
+                                    <span class="ml-2">Men</span>
+                                </label>
+                                <label class="flex items-center">
+                                    <input type="checkbox" class="category-filter form-checkbox text-gold-500" value="women" checked>
+                                    <span class="ml-2">Women</span>
+                                </label>
+                                <label class="flex items-center">
+                                    <input type="checkbox" class="category-filter form-checkbox text-gold-500" value="vintage" checked>
+                                    <span class="ml-2">Vintage</span>
+                                </label>
+                            </div>
+                        </div>
+                        
+                        <div class="mb-6">
+                            <h4 class="font-semibold mb-3">Price Range</h4>
+                            <div class="flex items-center justify-between mb-2">
+                                <span class="text-sm">$<span id="min-price">20</span></span>
+                                <span class="text-sm">$<span id="max-price">500</span></span>
+                            </div>
+                            <div class="flex items-center space-x-4">
+                                <input type="range" min="20" max="500" value="20" id="price-min" class="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer">
+                                <input type="range" min="20" max="500" value="500" id="price-max" class="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer">
+                            </div>
+                            <div class="text-center mt-2">
+                                <span class="text-sm">Selected: $<span id="price-min-display">20</span> - $<span id="price-max-display">500</span></span>
+                            </div>
+                        </div>
+                        
+                        <div class="mb-6">
+                            <h4 class="font-semibold mb-3">Bottle Size (ml)</h4>
+                            <div class="grid grid-cols-3 gap-2">
+                                <button class="size-filter bg-gray-100 hover:bg-gold-500 hover:text-white py-1 px-2 rounded text-sm transition" data-size="30">30ml</button>
+                                <button class="size-filter bg-gray-100 hover:bg-gold-500 hover:text-white py-1 px-2 rounded text-sm transition" data-size="50">50ml</button>
+                                <button class="size-filter bg-gray-100 hover:bg-gold-500 hover:text-white py-1 px-2 rounded text-sm transition" data-size="100">100ml</button>
+                                <button class="size-filter bg-gray-100 hover:bg-gold-500 hover:text-white py-1 px-2 rounded text-sm transition" data-size="150">150ml</button>
+                                <button class="size-filter bg-gray-100 hover:bg-gold-500 hover:text-white py-1 px-2 rounded text-sm transition" data-size="200">200ml</button>
+                                <button class="size-filter bg-gray-100 hover:bg-gold-500 hover:text-white py-1 px-2 rounded text-sm transition" data-size="250">250ml</button>
+                            </div>
+                        </div>
+                        
+                        <div class="mb-6">
+                            <h4 class="font-semibold mb-3">Brand</h4>
+                            <select class="brand-filter w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-1 focus:ring-gold-500">
+                                <option value="all">All Brands</option>
+                                <option>Chanel</option>
+                                <option>Dior</option>
+                                <option>Tom Ford</option>
+                                <option>Yves Saint Laurent</option>
+                                <option>Gucci</option>
+                                <option>Versace</option>
+                            </select>
+                        </div>
+                        
+                        <div class="mb-6">
+                            <h4 class="font-semibold mb-3">Scent Type</h4>
+                            <select class="scent-filter w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-1 focus:ring-gold-500">
+                                <option value="all">All Scents</option>
+                                <option>Floral</option>
+                                <option>Woody</option>
+                                <option>Fresh</option>
+                                <option>Oriental</option>
+                                <option>Fruity</option>
+                                <option>Spicy</option>
+                            </select>
+                        </div>
+                        
+                        <button id="reset-filters" class="w-full bg-gray-200 text-black py-2 rounded hover:bg-gray-300 transition mb-3">Reset Filters</button>
+                        <button id="apply-filters" class="w-full bg-black text-white py-2 rounded hover:bg-gray-800 transition">Apply Filters</button>
+                    </div>
+                </div>
+                
+                <!-- Products -->
+                <div class="w-full md:w-3/4">
+                    <div class="flex justify-between items-center mb-8">
+                        <div>
+                            <span class="text-gray-600">Showing 1-12 of 48 products</span>
+                        </div>
+                        <div>
+                            <select id="sort-products" class="border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-1 focus:ring-gold-500">
+                                <option value="featured">Sort by: Featured</option>
+                                <option value="price-low">Price: Low to High</option>
+                                <option value="price-high">Price: High to Low</option>
+                                <option value="newest">Newest Arrivals</option>
+                                <option value="best-selling">Best Selling</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                        <!-- Product 1 -->
+                        <div class="product-card bg-white rounded-lg overflow-hidden shadow-sm transition duration-300">
+                            <div class="relative">
+                                <div class="product-image-container">
+                                    <img src="https://images.unsplash.com/photo-1594035910387-f355283d0e72?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=500&q=80" alt="Chanel No. 5" class="product-image w-full h-64 object-cover">
+                                </div>
+                                <div class="sale-badge">SALE</div>
+                                <div class="absolute top-0 left-0 bg-black text-white text-xs px-2 py-1">NEW</div>
+                            </div>
+                            <div class="p-4">
+                                <div class="flex justify-between items-start mb-2">
+                                    <h3 class="font-bold">Chanel No. 5</h3>
+                                    <div class="flex items-center">
+                                        <i class="fas fa-star text-yellow-400 text-xs"></i>
+                                        <span class="text-xs ml-1">4.8</span>
+                                    </div>
+                                </div>
+                                <p class="text-gray-600 text-sm mb-3">Floral, Aldehyde, Powdery</p>
+                                <div class="flex justify-between items-center">
+                                    <div>
+                                        <span class="font-bold text-gold-600">$120.00</span>
+                                        <span class="text-sm text-gray-400 line-through ml-2">$150.00</span>
+                                        <div class="text-xs text-gray-500 mt-1">100ml</div>
+                                    </div>
+                                    <button class="add-to-cart bg-black text-white p-2 rounded-full hover:bg-gray-800 transition" data-id="1" data-name="Chanel No. 5" data-price="120" data-image="https://images.unsplash.com/photo-1594035910387-f355283d0e72?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=500&q=80">
+                                        <i class="fas fa-plus"></i>
+                                    </button>
+                                </div>
+                                
+                                <!-- Product Details Section -->
+                                <div class="mt-4">
+                                    <button class="show-more-btn text-sm text-gray-600 hover:text-black flex items-center">
+                                        <span>Show Details</span>
+                                        <i class="fas fa-chevron-down text-xs ml-2"></i>
+                                    </button>
+                                    
+                                    <div class="product-details text-sm text-gray-600 mt-2">
+                                        <div class="grid grid-cols-1 gap-3">
+                                            <div>
+                                                <span class="font-medium">Product Type:</span>
+                                                <p>Eau de Parfum</p>
+                                            </div>
+                                            <div>
+                                                <span class="font-medium">For:</span>
+                                                <p>Ladies</p>
+                                            </div>
+                                            <div>
+                                                <span class="font-medium">Application:</span>
+                                                <p>Neck, Wrists</p>
+                                            </div>
+                                            <div>
+                                                <span class="font-medium">Top Notes:</span>
+                                                <p>Bergamot, Lemon</p>
+                                            </div>
+                                        </div>
+                                        <div class="mt-3">
+                                            <span class="font-medium">Sustainability:</span>
+                                            <p>Glass bottle, Recyclable packaging</p>
+                                        </div>
+                                        <p class="mt-2">A timeless floral bouquet with sparkling top notes of citrus and the sensual warmth of vanilla.</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Product 2 -->
+                        <div class="product-card bg-white rounded-lg overflow-hidden shadow-sm transition duration-300">
+                            <div class="relative">
+                                <div class="product-image-container">
+                                    <img src="https://images.unsplash.com/photo-1595425964073-9b8436f1d7a5?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=500&q=80" alt="Dior Sauvage" class="product-image w-full h-64 object-cover">
+                                </div>
+                                <div class="absolute top-0 left-0 bg-black text-white text-xs px-2 py-1">BESTSELLER</div>
+                            </div>
+                            <div class="p-4">
+                                <div class="flex justify-between items-start mb-2">
+                                    <h3 class="font-bold">Dior Sauvage</h3>
+                                    <div class="flex items-center">
+                                        <i class="fas fa-star text-yellow-400 text-xs"></i>
+                                        <span class="text-xs ml-1">4.9</span>
+                                    </div>
+                                </div>
+                                <p class="text-gray-600 text-sm mb-3">Fresh, Spicy, Woody</p>
+                                <div class="flex justify-between items-center">
+                                    <div>
+                                        <span class="font-bold text-gold-600">$95.00</span>
+                                        <div class="text-xs text-gray-500 mt-1">100ml</div>
+                                    </div>
+                                    <button class="add-to-cart bg-black text-white p-2 rounded-full hover:bg-gray-800 transition" data-id="2" data-name="Dior Sauvage" data-price="95" data-image="https://images.unsplash.com/photo-1595425964073-9b8436f1d7a5?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=500&q=80">
+                                        <i class="fas fa-plus"></i>
+                                    </button>
+                                </div>
+                                
+                                <!-- Product Details Section -->
+                                <div class="mt-4">
+                                    <button class="show-more-btn text-sm text-gray-600 hover:text-black flex items-center">
+                                        <span>Show Details</span>
+                                        <i class="fas fa-chevron-down text-xs ml-2"></i>
+                                    </button>
+                                    
+                                    <div class="product-details text-sm text-gray-600 mt-2">
+                                        <div class="grid grid-cols-1 gap-3">
+                                            <div>
+                                                <span class="font-medium">Product Type:</span>
+                                                <p>Eau de Toilette</p>
+                                            </div>
+                                            <div>
+                                                <span class="font-medium">For:</span>
+                                                <p>Gentlemen</p>
+                                            </div>
+                                            <div>
+                                                <span class="font-medium">Application:</span>
+                                                <p>Chest, Neck</p>
+                                            </div>
+                                            <div>
+                                                <span class="font-medium">Top Notes:</span>
+                                                <p>Bergamot, Pepper</p>
+                                            </div>
+                                        </div>
+                                        <div class="mt-3">
+                                            <span class="font-medium">Sustainability:</span>
+                                            <p>Glass bottle, Refillable</p>
+                                        </div>
+                                        <p class="mt-2">A radically fresh composition with Calabrian bergamot and spicy pepper notes.</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Product 3 -->
+                        <div class="product-card bg-white rounded-lg overflow-hidden shadow-sm transition duration-300">
+                            <div class="relative">
+                                <div class="product-image-container">
+                                    <img src="https://images.unsplash.com/photo-1615634265067-24d7e1f5990a?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=500&q=80" alt="Tom Ford Black Orchid" class="product-image w-full h-64 object-cover">
+                                </div>
+                            </div>
+                            <div class="p-4">
+                                <div class="flex justify-between items-start mb-2">
+                                    <h3 class="font-bold">Tom Ford Black Orchid</h3>
+                                    <div class="flex items-center">
+                                        <i class="fas fa-star text-yellow-400 text-xs"></i>
+                                        <span class="text-xs ml-1">4.7</span>
+                                    </div>
+                                </div>
+                                <p class="text-gray-600 text-sm mb-3">Oriental, Floral, Woody</p>
+                                <div class="flex justify-between items-center">
+                                    <div>
+                                        <span class="font-bold text-gold-600">$220.00</span>
+                                        <div class="text-xs text-gray-500 mt-1">50ml</div>
+                                    </div>
+                                    <button class="add-to-cart bg-black text-white p-2 rounded-full hover:bg-gray-800 transition" data-id="3" data-name="Tom Ford Black Orchid" data-price="220" data-image="https://images.unsplash.com/photo-1615634265067-24d7e1f5990a?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=500&q=80">
+                                        <i class="fas fa-plus"></i>
+                                    </button>
+                                </div>
+                                
+                                <!-- Product Details Section -->
+                                <div class="mt-4">
+                                    <button class="show-more-btn text-sm text-gray-600 hover:text-black flex items-center">
+                                        <span>Show Details</span>
+                                        <i class="fas fa-chevron-down text-xs ml-2"></i>
+                                    </button>
+                                    
+                                    <div class="product-details text-sm text-gray-600 mt-2">
+                                        <div class="grid grid-cols-1 gap-3">
+                                            <div>
+                                                <span class="font-medium">Product Type:</span>
+                                                <p>Eau de Parfum</p>
+                                            </div>
+                                            <div>
+                                                <span class="font-medium">For:</span>
+                                                <p>Unisex</p>
+                                            </div>
+                                            <div>
+                                                <span class="font-medium">Application:</span>
+                                                <p>Pulse Points</p>
+                                            </div>
+                                            <div>
+                                                <span class="font-medium">Top Notes:</span>
+                                                <p>Truffle, Black Orchid</p>
+                                            </div>
+                                        </div>
+                                        <div class="mt-3">
+                                            <span class="font-medium">Sustainability:</span>
+                                            <p>Glass bottle, Luxury packaging</p>
+                                        </div>
+                                        <p class="mt-2">A provocative blend of black truffle, ylang ylang and black orchid for a mysterious, sensual scent.</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Product 4 -->
+                        <div class="product-card bg-white rounded-lg overflow-hidden shadow-sm transition duration-300">
+                            <div class="relative">
+                                <div class="product-image-container">
+                                    <img src="https://images.unsplash.com/photo-1547887538-e3a2f32cb1cf?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=500&q=80" alt="YSL Black Opium" class="product-image w-full h-64 object-cover">
+                                </div>
+                                <div class="sale-badge">-20%</div>
+                            </div>
+                            <div class="p-4">
+                                <div class="flex justify-between items-start mb-2">
+                                    <h3 class="font-bold">YSL Black Opium</h3>
+                                    <div class="flex items-center">
+                                        <i class="fas fa-star text-yellow-400 text-xs"></i>
+                                        <span class="text-xs ml-1">4.8</span>
+                                    </div>
+                                </div>
+                                <p class="text-gray-600 text-sm mb-3">Oriental, Vanilla, Coffee</p>
+                                <div class="flex justify-between items-center">
+                                    <div>
+                                        <span class="font-bold text-gold-600">$88.00</span>
+                                        <span class="text-sm text-gray-400 line-through ml-2">$110.00</span>
+                                        <div class="text-xs text-gray-500 mt-1">50ml</div>
+                                    </div>
+                                    <button class="add-to-cart bg-black text-white p-2 rounded-full hover:bg-gray-800 transition" data-id="4" data-name="YSL Black Opium" data-price="88" data-image="https://images.unsplash.com/photo-1547887538-e3a2f32cb1cf?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=500&q=80">
+                                        <i class="fas fa-plus"></i>
+                                    </button>
+                                </div>
+                                
+                                <!-- Product Details Section -->
+                                <div class="mt-4">
+                                    <button class="show-more-btn text-sm text-gray-600 hover:text-black flex items-center">
+                                        <span>Show Details</span>
+                                        <i class="fas fa-chevron-down text-xs ml-2"></i>
+                                    </button>
+                                    
+                                    <div class="product-details text-sm text-gray-600 mt-2">
+                                        <div class="grid grid-cols-1 gap-3">
+                                            <div>
+                                                <span class="font-medium">Product Type:</span>
+                                                <p>Eau de Parfum</p>
+                                            </div>
+                                            <div>
+                                                <span class="font-medium">For:</span>
+                                                <p>Ladies</p>
+                                            </div>
+                                            <div>
+                                                <span class="font-medium">Application:</span>
+                                                <p>Neck, Wrists</p>
+                                            </div>
+                                            <div>
+                                                <span class="font-medium">Top Notes:</span>
+                                                <p>Coffee, Pink Pepper</p>
+                                            </div>
+                                        </div>
+                                        <div class="mt-3">
+                                            <span class="font-medium">Sustainability:</span>
+                                            <p>Glass bottle, Recyclable</p>
+                                        </div>
+                                        <p class="mt-2">A bold, addictive fragrance with notes of coffee, vanilla and white flowers for a modern edge.</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Product 5 -->
+                        <div class="product-card bg-white rounded-lg overflow-hidden shadow-sm transition duration-300">
+                            <div class="relative">
+                                <div class="product-image-container">
+                                    <img src="https://images.unsplash.com/photo-1594035910387-f355283d0e72?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=500&q=80" alt="Gucci Bloom" class="product-image w-full h-64 object-cover">
+                                </div>
+                            </div>
+                            <div class="p-4">
+                                <div class="flex justify-between items-start mb-2">
+                                    <h3 class="font-bold">Gucci Bloom</h3>
+                                    <div class="flex items-center">
+                                        <i class="fas fa-star text-yellow-400 text-xs"></i>
+                                        <span class="text-xs ml-1">4.6</span>
+                                    </div>
+                                </div>
+                                <p class="text-gray-600 text-sm mb-3">Floral, Tuberose, Jasmine</p>
+                                <div class="flex justify-between items-center">
+                                    <div>
+                                        <span class="font-bold text-gold-600">$105.00</span>
+                                        <div class="text-xs text-gray-500 mt-1">100ml</div>
+                                    </div>
+                                    <button class="add-to-cart bg-black text-white p-2 rounded-full hover:bg-gray-800 transition" data-id="5" data-name="Gucci Bloom" data-price="105" data-image="https://images.unsplash.com/photo-1594035910387-f355283d0e72?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=500&q=80">
+                                        <i class="fas fa-plus"></i>
+                                    </button>
+                                </div>
+                                
+                                <!-- Product Details Section -->
+                                <div class="mt-4">
+                                    <button class="show-more-btn text-sm text-gray-600 hover:text-black flex items-center">
+                                        <span>Show Details</span>
+                                        <i class="fas fa-chevron-down text-xs ml-2"></i>
+                                    </button>
+                                    
+                                    <div class="product-details text-sm text-gray-600 mt-2">
+                                        <div class="grid grid-cols-1 gap-3">
+                                            <div>
+                                                <span class="font-medium">Product Type:</span>
+                                                <p>Eau de Parfum</p>
+                                            </div>
+                                            <div>
+                                                <span class="font-medium">For:</span>
+                                                <p>Ladies</p>
+                                            </div>
+                                            <div>
+                                                <span class="font-medium">Application:</span>
+                                                <p>Neck, Wrists</p>
+                                            </div>
+                                            <div>
+                                                <span class="font-medium">Top Notes:</span>
+                                                <p>Jasmine, Tuberose</p>
+                                            </div>
+                                        </div>
+                                        <div class="mt-3">
+                                            <span class="font-medium">Sustainability:</span>
+                                            <p>Glass bottle, Minimal packaging</p>
+                                        </div>
+                                        <p class="mt-2">A rich white floral fragrance inspired by the memory of a women's garden in bloom.</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Product 6 -->
+                        <div class="product-card bg-white rounded-lg overflow-hidden shadow-sm transition duration-300">
+                            <div class="relative">
+                                <div class="product-image-container">
+                                    <img src="https://images.unsplash.com/photo-1595425964073-9b8436f1d7a5?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=500&q=80" alt="Versace Eros" class="product-image w-full h-64 object-cover">
+                                </div>
+                                <div class="absolute top-0 left-0 bg-black text-white text-xs px-2 py-1">LIMITED</div>
+                            </div>
+                            <div class="p-4">
+                                <div class="flex justify-between items-start mb-2">
+                                    <h3 class="font-bold">Versace Eros</h3>
+                                    <div class="flex items-center">
+                                        <i class="fas fa-star text-yellow-400 text-xs"></i>
+                                        <span class="text-xs ml-1">4.5</span>
+                                    </div>
+                                </div>
+                                <p class="text-gray-600 text-sm mb-3">Fresh, Woody, Mint</p>
+                                <div class="flex justify-between items-center">
+                                    <div>
+                                        <span class="font-bold text-gold-600">$75.00</span>
+                                        <div class="text-xs text-gray-500 mt-1">100ml</div>
+                                    </div>
+                                    <button class="add-to-cart bg-black text-white p-2 rounded-full hover:bg-gray-800 transition" data-id="6" data-name="Versace Eros" data-price="75" data-image="https://images.unsplash.com/photo-1595425964073-9b8436f1d7a5?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=500&q=80">
+                                        <i class="fas fa-plus"></i>
+                                    </button>
+                                </div>
+                                
+                                <!-- Product Details Section -->
+                                <div class="mt-4">
+                                    <button class="show-more-btn text-sm text-gray-600 hover:text-black flex items-center">
+                                        <span>Show Details</span>
+                                        <i class="fas fa-chevron-down text-xs ml-2"></i>
+                                    </button>
+                                    
+                                    <div class="product-details text-sm text-gray-600 mt-2">
+                                        <div class="grid grid-cols-1 gap-3">
+                                            <div>
+                                                <span class="font-medium">Product Type:</span>
+                                                <p>Eau de Toilette</p>
+                                            </div>
+                                            <div>
+                                                <span class="font-medium">For:</span>
+                                                <p>Gentlemen</p>
+                                            </div>
+                                            <div>
+                                                <span class="font-medium">Application:</span>
+                                                <p>Chest, Neck</p>
+                                            </div>
+                                            <div>
+                                                <span class="font-medium">Top Notes:</span>
+                                                <p>Mint, Green Apple</p>
+                                            </div>
+                                        </div>
+                                        <div class="mt-3">
+                                            <span class="font-medium">Sustainability:</span>
+                                            <p>Glass bottle, Recyclable</p>
+                                        </div>
+                                        <p class="mt-2">A vibrant, intense fragrance with fresh mint, green apple and tonka bean notes.</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="mt-12 flex justify-center">
+                        <nav class="flex items-center space-x-2">
+                            <button class="px-3 py-1 rounded border border-gray-300 text-gray-600 hover:bg-gray-100">&laquo;</button>
+                            <button class="px-3 py-1 rounded bg-black text-white">1</button>
+                            <button class="px-3 py-1 rounded border border-gray-300 text-gray-600 hover:bg-gray-100">2</button>
+                            <button class="px-3 py-1 rounded border border-gray-300 text-gray-600 hover:bg-gray-100">3</button>
+                            <button class="px-3 py-1 rounded border border-gray-300 text-gray-600 hover:bg-gray-100">4</button>
+                            <button class="px-3 py-1 rounded border border-gray-300 text-gray-600 hover:bg-gray-100">&raquo;</button>
+                        </nav>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Testimonials -->
+    <section class="py-16 bg-white">
+        <div class="container mx-auto px-4">
+            <h2 class="text-3xl font-serif font-bold text-center mb-12">What Our Customers Say</h2>
+            
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div class="bg-gray-50 p-6 rounded-lg">
+                    <div class="flex items-center mb-4">
+                        <div class="flex items-center">
+                            <i class="fas fa-star text-yellow-400"></i>
+                            <i class="fas fa-star text-yellow-400"></i>
+                            <i class="fas fa-star text-yellow-400"></i>
+                            <i class="fas fa-star text-yellow-400"></i>
+                            <i class="fas fa-star text-yellow-400"></i>
+                        </div>
+                        <span class="text-sm text-gray-500 ml-2">2 days ago</span>
+                    </div>
+                    <p class="text-gray-700 mb-4">"The Chanel No. 5 perfume is absolutely divine! The packaging was beautiful and it arrived quickly. Will definitely purchase again."</p>
+                    <div class="flex items-center">
+                        <img src="https://randomuser.me/api/portraits/women/44.jpg" alt="Sarah J." class="w-10 h-10 rounded-full mr-3">
+                        <div>
+                            <h4 class="font-semibold">Sarah J.</h4>
+                            <p class="text-sm text-gray-500">Verified Buyer</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="bg-gray-50 p-6 rounded-lg">
+                    <div class="flex items-center mb-4">
+                        <div class="flex items-center">
+                            <i class="fas fa-star text-yellow-400"></i>
+                            <i class="fas fa-star text-yellow-400"></i>
+                            <i class="fas fa-star text-yellow-400"></i>
+                            <i class="fas fa-star text-yellow-400"></i>
+                            <i class="fas fa-star text-yellow-400"></i>
+                        </div>
+                        <span class="text-sm text-gray-500 ml-2">1 week ago</span>
+                    </div>
+                    <p class="text-gray-700 mb-4">"Dior Sauvage has become my signature scent. The longevity is impressive and I receive compliments daily. Excellent service too!"</p>
+                    <div class="flex items-center">
+                        <img src="https://randomuser.me/api/portraits/men/32.jpg" alt="Michael T." class="w-10 h-10 rounded-full mr-3">
+                        <div>
+                            <h4 class="font-semibold">Michael T.</h4>
+                            <p class="text-sm text-gray-500">Verified Buyer</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="bg-gray-50 p-6 rounded-lg">
+                    <div class="flex items-center mb-4">
+                        <div class="flex items-center">
+                            <i class="fas fa-star text-yellow-400"></i>
+                            <i class="fas fa-star text-yellow-400"></i>
+                            <i class="fas fa-star text-yellow-400"></i>
+                            <i class="fas fa-star text-yellow-400"></i>
+                            <i class="fas fa-star-half-alt text-yellow-400"></i>
+                        </div>
+                        <span class="text-sm text-gray-500 ml-2">3 weeks ago</span>
+                    </div>
+                    <p class="text-gray-700 mb-4">"The vintage collection is amazing. I found a discontinued perfume I've been searching for years. Thank you Luxury Scents!"</p>
+                    <div class="flex items-center">
+                        <img src="https://randomuser.me/api/portraits/women/68.jpg" alt="Emily R." class="w-10 h-10 rounded-full mr-3">
+                        <div>
+                            <h4 class="font-semibold">Emily R.</h4>
+                            <p class="text-sm text-gray-500">Verified Buyer</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about" class="py-16 bg-gray-50">
+        <div class="container mx-auto px-4">
+            <div class="flex flex-col md:flex-row items-center">
+                <div class="md:w-1/2 mb-8 md:mb-0 md:pr-8">
+                    <img src="https://mir-s3-cdn-cf.behance.net/project_modules/max_1200/80bc7d142683069.626b22c372718.jpg" alt="About Luxury Scents" class="rounded-lg shadow-lg w-full">
+                </div>
+                <div class="md:w-1/2">
+                    <h2 class="text-3xl font-serif font-bold mb-6">Our Story</h2>
+                    <p class="text-gray-700 mb-4">Founded in 2024, Luxury Scents has been dedicated to bringing the finest perfumes from around the world to discerning customers who appreciate quality and craftsmanship.</p>
+                    <p class="text-gray-700 mb-6">We work directly with the most prestigious perfume houses to ensure authenticity and offer exclusive products you won't find anywhere else.</p>
+                    <div class="grid grid-cols-2 gap-4 mb-6">
+                        <div class="flex items-center">
+                            <div class="bg-black text-white p-2 rounded-full mr-3">
+                                <i class="fas fa-check"></i>
+                            </div>
+                            <span>100% Authentic</span>
+                        </div>
+                        <div class="flex items-center">
+                            <div class="bg-black text-white p-2 rounded-full mr-3">
+                                <i class="fas fa-check"></i>
+                            </div>
+                            <span>Worldwide Shipping</span>
+                        </div>
+                        <div class="flex items-center">
+                            <div class="bg-black text-white p-2 rounded-full mr-3">
+                                <i class="fas fa-check"></i>
+                            </div>
+                            <span>Secure Payment</span>
+                        </div>
+                        <div class="flex items-center">
+                            <div class="bg-black text-white p-2 rounded-full mr-3">
+                                <i class="fas fa-check"></i>
+                            </div>
+                            <span>24/7 Support</span>
+                        </div>
+                    </div>
+                    <button class="bg-black text-white py-2 px-6 rounded hover:bg-gray-800 transition">Learn More</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Newsletter -->
+    <section class="py-16 bg-black text-white">
+        <div class="container mx-auto px-4 text-center">
+            <h2 class="text-3xl font-serif font-bold mb-4">Join Our Newsletter</h2>
+            <p class="max-w-2xl mx-auto mb-8">Subscribe to receive updates, access to exclusive deals, and be the first to know about new arrivals.</p>
+            <div class="max-w-md mx-auto flex">
+                <input type="email" placeholder="Your email address" class="flex-grow px-4 py-3 rounded-l focus:outline-none text-black">
+                <button class="bg-gold-500 hover:bg-gold-600 text-black font-bold px-6 py-3 rounded-r transition">Subscribe</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="py-16 bg-white">
+        <div class="container mx-auto px-4">
+            <h2 class="text-3xl font-serif font-bold text-center mb-12">Contact Us</h2>
+            
+            <div class="flex flex-col md:flex-row gap-8">
+                <div class="md:w-1/2">
+                    <form class="space-y-4">
+                        <div>
+                            <label for="name" class="block mb-1">Name</label>
+                            <input type="text" id="name" class="w-full border border-gray-300 rounded px-4 py-2 focus:outline-none focus:ring-1 focus:ring-gold-500">
+                        </div>
+                        <div>
+                            <label for="email" class="block mb-1">Email</label>
+                            <input type="email" id="email" class="w-full border border-gray-300 rounded px-4 py-2 focus:outline-none focus:ring-1 focus:ring-gold-500">
+                        </div>
+                        <div>
+                            <label for="subject" class="block mb-1">Subject</label>
+                            <input type="text" id="subject" class="w-full border border-gray-300 rounded px-4 py-2 focus:outline-none focus:ring-1 focus:ring-gold-500">
+                        </div>
+                        <div>
+                            <label for="message" class="block mb-1">Message</label>
+                            <textarea id="message" rows="4" class="w-full border border-gray-300 rounded px-4 py-2 focus:outline-none focus:ring-1 focus:ring-gold-500"></textarea>
+                        </div>
+                        <button type="submit" class="bg-black text-white py-2 px-6 rounded hover:bg-gray-800 transition">Send Message</button>
+                    </form>
+                </div>
+                
+                <div class="md:w-1/2">
+                    <div class="bg-gray-50 p-6 rounded-lg h-full">
+                        <h3 class="font-bold text-lg mb-4">Get in Touch</h3>
+                        <div class="space-y-4">
+                            <div class="flex items-start">
+                                <div class="bg-black text-white p-2 rounded-full mr-4">
+                                    <i class="fas fa-map-marker-alt"></i>
+                                </div>
+                                <div>
+                                    <h4 class="font-semibold">Address</h4>
+                                    <p class="text-gray-600">123 Perfume Avenue, Luxury District, 10001</p>
+                                </div>
+                            </div>
+                            <div class="flex items-start">
+                                <div class="bg-black text-white p-2 rounded-full mr-4">
+                                    <i class="fas fa-phone"></i>
+                                </div>
+                                <div>
+                                    <h4 class="font-semibold">Phone</h4>
+                                    <p class="text-gray-600">024 533 2299 </p>
+                                </div>
+                            </div>
+                            <div class="flex items-start">
+                                <div class="bg-black text-white p-2 rounded-full mr-4">
+                                    <i class="fas fa-envelope"></i>
+                                </div>
+                                <div>
+                                    <h4 class="font-semibold">Email</h4>
+                                    <p class="text-gray-600">info@luxuryscents.com</p>
+                                </div>
+                            </div>
+                            <div class="flex items-start">
+                                <div class="bg-black text-white p-2 rounded-full mr-4">
+                                    <i class="fas fa-clock"></i>
+                                </div>
+                                <div>
+                                    <h4 class="font-semibold">Hours</h4>
+                                    <p class="text-gray-600">Monday - Friday: 9am - 6pm</p>
+                                    <p class="text-gray-600">Saturday: 10am - 4pm</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <h3 class="font-bold text-lg mt-8 mb-4">Follow Us</h3>
+                        <div class="flex space-x-4">
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-black text-white py-12">
+        <div class="container mx-auto px-4">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+                <div>
+                    <h3 class="text-xl font-serif font-bold mb-4">LUXURY SCENTS</h3>
+                    <p class="text-gray-400 mb-4">The finest selection of luxury perfumes from around the world.</p>
+                    <div class="flex space-x-4">
+
+                    </div>
+                </div>
+                
+                <div>
+                    <h4 class="font-bold mb-4">Shop</h4>
+                    <ul class="space-y-2">
+                        <li><a href="#" class="text-gray-400 hover:text-white transition">Men's Perfumes</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white transition">Women's Perfumes</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white transition">Vintage Collection</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white transition">New Arrivals</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white transition">Best Sellers</a></li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h4 class="font-bold mb-4">Customer Service</h4>
+                    <ul class="space-y-2">
+                        <li><a href="#" class="text-gray-400 hover:text-white transition">Contact Us</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white transition">FAQs</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white transition">Shipping & Returns</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white transition">Track Order</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white transition">Privacy Policy</a></li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h4 class="font-bold mb-4">Newsletter</h4>
+                    <p class="text-gray-400 mb-4">Subscribe to get special offers, free giveaways, and once-in-a-lifetime deals.</p>
+                    <div class="flex">
+                        <input type="email" placeholder="Your email" class="bg-gray-800 text-white px-4 py-2 rounded-l focus:outline-none w-full">
+                        <button class="bg-gold-500 hover:bg-gold-600 text-black px-4 py-2 rounded-r transition">
+                            <i class="fas fa-paper-plane"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="border-t border-gray-800 mt-12 pt-8 flex flex-col md:flex-row justify-between items-center">
+                <p class="text-gray-400 mb-4 md:mb-0">© 2025 Luxury Scents. All rights reserved.</p>
+                <div class="flex space-x-6">
+                    <img src="https://logowik.com/content/uploads/images/mtn7291.logowik.com.webp" alt="MTN MoMo " class="h-6">
+                    <img src="https://telecel.com.gh/static/cash-fb8c2a3923a8951b48aba883fa5a0ef7.webp" alt="Telecel Push" class="h-6">
+                    <img src="https://www.at.com.gh/assets/img/at-logos/at-logo-sm.png" alt="AT Transfer" class="h-6">
+                    <img src="https://cdn-icons-png.flaticon.com/512/10384/10384161.png" alt="Cash" class="h-6">
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Shopping Cart Sidebar -->
+    <div id="cart-sidebar" class="fixed top-0 right-0 h-full w-full md:w-96 bg-white shadow-lg transform translate-x-full transition-transform duration-300 z-50 overflow-y-auto">
+        <div class="p-6">
+            <div class="flex justify-between items-center mb-6">
+                <h3 class="text-xl font-bold">Your Cart</h3>
+                <button id="close-cart" class="text-gray-500 hover:text-black">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            
+            <div id="cart-items" class="space-y-4">
+                <!-- Cart items will be added here dynamically -->
+                <div class="text-center py-8 text-gray-500" id="empty-cart-message">
+                    <i class="fas fa-shopping-cart text-4xl mb-4"></i>
+                    <p>Your cart is empty</p>
+                     <a href="#shop" class="inline-block bg-black text-white px-6 py-2 rounded hover:bg-gray-800 transition">
+                        Continue Shopping
+                    </a>
+                </div>
+            </div>
+            
+            <div id="cart-summary" class="border-t border-gray-200 pt-4 mt-4 hidden">
+                <div class="flex justify-between mb-2">
+                    <span>Subtotal</span>
+                    <span id="cart-subtotal">$0.00</span>
+                </div>
+                <div class="flex justify-between mb-2">
+                    <span>Shipping</span>
+                    <span id="cart-shipping">Calculated at checkout</span>
+                </div>
+                <div class="flex justify-between font-bold text-lg mt-4">
+                    <span>Total</span>
+                    <span id="cart-total">$0.00</span>
+                </div>
+                
+                <button id="checkout-button" class="w-full bg-black text-white py-3 rounded mt-6 hover:bg-gray-800 transition">Proceed to Checkout</button>
+                <a href="#shop" class="block text-center mt-4 text-gray-600 hover:text-black transition">Continue Shopping</a>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Checkout Modal -->
+    <div id="checkout-modal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
+        <div class="bg-white rounded-lg w-full max-w-2xl max-h-screen overflow-y-auto">
+            <div class="p-6">
+                <div class="flex justify-between items-center mb-6">
+                    <h3 class="text-xl font-bold">Checkout</h3>
+                    <button id="close-checkout" class="text-gray-500 hover:text-black">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <div>
+                        <h4 class="font-bold mb-4">Shipping Information</h4>
+                        <form id="checkout-form" class="space-y-4">
+                            <div>
+                                <label class="block mb-1">Full Name <span class="text-red-500">*</span></label>
+                                <input type="text" name="fullname" placeholder="Nat Norman" class="w-full border border-gray-300 rounded px-4 py-2 focus:outline-none focus:ring-1 focus:ring-gold-500" required>
+                                <p class="error-message" id="fullname-error">Please enter your full name</p>
+                            </div>
+                            <div>
+                                <label class="block mb-1">Phone Number <span class="text-red-500">*</span></label>
+                                <input type="tel" name="phone" placeholder="024-XXX-XXXX" class="w-full border border-gray-300 rounded px-4 py-2 focus:outline-none focus:ring-1 focus:ring-gold-500" required>
+                                <p class="error-message" id="phone-error">Please enter a valid phone number</p>
+                            </div>
+                            <div>
+                                <label class="block mb-1">Email <span class="text-red-500">*</span></label>
+                                <input type="email" name="email" placeholder="natnorman@gmail.com" class="w-full border border-gray-300 rounded px-4 py-2 focus:outline-none focus:ring-1 focus:ring-gold-500" required>
+                                <p class="error-message" id="email-error">Please enter a valid email address</p>
+                            </div>
+                            <div>
+                                <label class="block mb-1">Address <span class="text-red-500">*</span></label>
+                                <input type="text" name="address" placeholder="24 Dzorwulu Cresent, Dzorwulu" class="w-full border border-gray-300 rounded px-4 py-2 focus:outline-none focus:ring-1 focus:ring-gold-500" required>
+                                <p class="error-message" id="address-error">Please enter your address</p>
+                            </div>
+                            <div class="grid grid-cols-2 gap-4">
+                                <div>
+                                    <label class="block mb-1">City <span class="text-red-500">*</span></label>
+                                    <input type="text" name="city" placeholder="Accra" class="w-full border border-gray-300 rounded px-4 py-2 focus:outline-none focus:ring-1 focus:ring-gold-500" required>
+                                    <p class="error-message" id="city-error">Please enter your city</p>
+                                </div>
+                                <div>
+                                    <label class="block mb-1">GPS</label>
+                                    <input type="text" name="gps" placeholder="JK-409-XXXX" class="w-full border border-gray-300 rounded px-4 py-2 focus:outline-none focus:ring-1 focus:ring-gold-500">
+                                </div>
+                            </div>
+                            <div>
+                                <label class="block mb-1">Country <span class="text-red-500">*</span></label>
+                                <select name="country" class="w-full border border-gray-300 rounded px-4 py-2 focus:outline-none focus:ring-1 focus:ring-gold-500" required>
+                                    <option value="">Select Country</option>
+                                    <option>Ghana</option>
+                                    <option>Togo</option>
+                                    <option>Nigeria</option>
+                                    <option>United Kingdom</option>
+                                    <option>United States</option>
+                                    <option>Australia</option>
+                                    <option>Other</option>
+                                </select>
+                                <p class="error-message" id="country-error">Please select your country</p>
+                            </div>
+                        </form>
+                    </div>
+                    
+                    <div>
+                        <h4 class="font-bold mb-4">Order Summary</h4>
+                        <div id="checkout-items" class="space-y-4 mb-6 max-h-64 overflow-y-auto">
+                            <!-- Checkout items will be added here -->
+                        </div>
+                        
+                        <div class="border-t border-gray-200 pt-4">
+                            <div class="flex justify-between mb-2">
+                                <span>Subtotal</span>
+                                <span id="checkout-subtotal">$0.00</span>
+                            </div>
+                            <div class="flex justify-between mb-2">
+                                <span>Shipping</span>
+                                <span>$10.00</span>
+                            </div>
+                            <div class="flex justify-between font-bold text-lg mt-4">
+                                <span>Total</span>
+                                <span id="checkout-total">$0.00</span>
+                            </div>
+                        </div>
+                        
+                        <div class="mt-6">
+                            <h4 class="font-bold mb-4">Payment Method</h4>
+                            <div class="space-y-3">
+                                <label class="flex items-center border border-gray-300 rounded p-3 hover:border-black transition">
+                                    <input type="radio" name="payment" class="form-radio text-gold-500" checked>
+                                    <div class="ml-3">
+                                        <span class="font-medium">Pay Before Delivery</span>
+                                        <p class="text-sm text-gray-600 mt-1">Cash or Mobile Money</p>
+                                    </div>
+                                </label>
+                                <label class="flex items-center border border-gray-300 rounded p-3 hover:border-black transition">
+                                    <input type="radio" name="payment" class="form-radio text-gold-500">
+                                    <div class="ml-3">
+                                        <span class="font-medium">Pay on Delivery</span>
+                                        <p class="text-sm text-gray-600 mt-1">Cash or Mobile Money</p>
+                                    </div>
+                                </label>
+                            </div>
+                        </div>
+                        
+                        <button type="button" id="whatsapp-checkout-button" class="w-full bg-black text-white py-3 rounded mt-6 hover:bg-gray-800 transition">
+    Complete Order via WhatsApp
+</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Order Confirmation -->
+    <div id="order-confirmation" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
+        <div class="bg-white rounded-lg p-8 max-w-md w-full text-center">
+            <div class="text-gold-500 text-5xl mb-4">
+                <i class="fas fa-check-circle"></i>
+            </div>
+            <h3 class="text-2xl font-bold mb-2">Order Confirmed!</h3>
+            <p class="text-gray-600 mb-6">Thank you for your purchase. Your order has been received and is being processed.</p>
+            <div class="bg-gray-50 p-4 rounded mb-6">
+                <p class="font-medium">Order #<span id="order-number">LS12345</span></p>
+                <p class="text-sm text-gray-500">A confirmation email has been sent to your email address.</p>
+            </div>
+            <div class="flex space-x-4 justify-center">
+                <button id="view-order" class="bg-black text-white px-6 py-2 rounded hover:bg-gray-800 transition">View Order</button>
+                <button id="continue-shopping" class="border border-black px-6 py-2 rounded hover:bg-gray-100 transition">Continue Shopping</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+       document.addEventListener('DOMContentLoaded', function() {
+    // Mobile Menu Toggle
+    const mobileMenuButton = document.getElementById('mobile-menu-button');
+    const mobileMenu = document.getElementById('mobile-menu');
+    const mobileMenuOverlay = document.getElementById('mobile-menu-overlay');
+    const closeMobileMenu = document.getElementById('close-mobile-menu');
+    
+    mobileMenuButton.addEventListener('click', () => {
+        mobileMenu.classList.add('open');
+        mobileMenuOverlay.classList.remove('hidden');
+        document.body.style.overflow = 'hidden';
+    });
+    
+    closeMobileMenu.addEventListener('click', () => {
+        mobileMenu.classList.remove('open');
+        mobileMenuOverlay.classList.add('hidden');
+        document.body.style.overflow = '';
+    });
+    
+    mobileMenuOverlay.addEventListener('click', () => {
+        mobileMenu.classList.remove('open');
+        mobileMenuOverlay.classList.add('hidden');
+        document.body.style.overflow = '';
+    });
+
+    // Show Toast Notification
+    function showToast(message) {
+        const toast = document.getElementById('toast');
+        const toastMessage = document.getElementById('toast-message');
+        
+        toastMessage.textContent = message;
+        toast.classList.add('show');
+        
+        setTimeout(() => {
+            toast.classList.remove('show');
+        }, 3000);
+    }
+
+    // Cart Functionality
+    const cartButton = document.getElementById('cart-button');
+    const mobileCartButton = document.getElementById('mobile-cart-button');
+    const cartSidebar = document.getElementById('cart-sidebar');
+    const closeCart = document.getElementById('close-cart');
+    const cartItemsContainer = document.getElementById('cart-items');
+    const emptyCartMessage = document.getElementById('empty-cart-message');
+    const cartSummary = document.getElementById('cart-summary');
+    const cartSubtotal = document.getElementById('cart-subtotal');
+    const cartTotal = document.getElementById('cart-total');
+    const checkoutButton = document.getElementById('checkout-button');
+    
+    let cart = JSON.parse(localStorage.getItem('cart')) || [];
+
+    // WhatsApp Checkout Integration
+document.getElementById('whatsapp-checkout-button').addEventListener('click', function(e) {
+    e.preventDefault();
+    
+    // Validate form
+    const form = document.getElementById('checkout-form');
+    const formData = new FormData(form);
+    let isValid = true;
+
+    // Required fields validation
+    const requiredFields = ['fullname', 'phone', 'email', 'address', 'city', 'country'];
+    requiredFields.forEach(field => {
+        if (!formData.get(field)) {
+            isValid = false;
+            document.getElementById(`${field}-error`).style.display = 'block';
+        } else {
+            document.getElementById(`${field}-error`).style.display = 'none';
+        }
+    });
+
+    if (!isValid) {
+        showToast('Please fill all required fields');
+        return;
+    }
+
+    // Get payment method
+    const paymentMethod = document.querySelector('input[name="payment"]:checked').nextElementSibling.querySelector('span').textContent;
+    
+    // Build WhatsApp message
+    let whatsappMessage = `🛒 *NEW ORDER* 🛒\n\n`;
+    whatsappMessage += `*Customer Information:*\n`;
+    whatsappMessage += `👤 *Name:* ${formData.get('fullname')}\n`;
+    whatsappMessage += `📞 *Phone:* ${formData.get('phone')}\n`;
+    whatsappMessage += `📧 *Email:* ${formData.get('email')}\n\n`;
+    
+    whatsappMessage += `*Delivery Address:*\n`;
+    whatsappMessage += `📍 ${formData.get('address')}\n`;
+    whatsappMessage += `🏙️ ${formData.get('city')}, ${formData.get('country')}\n`;
+    if (formData.get('gps')) {
+        const gpsCode = formData.get('gps').trim();
+        whatsappMessage += `🗺️ *GPS:* https://ghanapostgps.com/map/#${gpsCode}\n`;
+    }
+    whatsappMessage += `\n`;
+
+    whatsappMessage += `*Order Summary:*\n`;
+    whatsappMessage += '────────────────────\n';
+    
+    // Add cart items
+    cart.forEach(item => {
+        whatsappMessage += `➤ ${item.quantity}x ${item.name} - $${item.price.toFixed(2)}\n`;
+    });
+    
+    // Calculate totals
+    const subtotal = cart.reduce((total, item) => total + (item.price * item.quantity), 0);
+    const shipping = 10; // $10 shipping
+    const total = subtotal + shipping;
+    
+    whatsappMessage += '────────────────────\n';
+    whatsappMessage += `📦 *Shipping:* $${shipping.toFixed(2)}\n`;
+    whatsappMessage += `💰 *Total:* $${total.toFixed(2)}\n\n`;
+    whatsappMessage += `💳 *Payment Method:* ${paymentMethod}\n\n`;
+    whatsappMessage += `Please confirm this order. Thank you!`;
+
+    // Your WhatsApp number (replace with your actual number)
+    const whatsappNumber = '233245332299'; // Ghana number example
+    
+    // Encode message for URL
+    const encodedMessage = encodeURIComponent(whatsappMessage);
+    
+    // Open WhatsApp with pre-filled message
+    window.open(`https://wa.me/${whatsappNumber}?text=${encodedMessage}`, '_blank');
+    
+    // Optional: Clear cart after submission
+    // cart = [];
+    // localStorage.removeItem('cart');
+    // updateCart();
+    
+    // Close checkout modal
+    checkoutModal.classList.add('hidden');
+    document.body.style.overflow = '';
+});
+    
+    // Add to Cart
+    function setupAddToCartButtons() {
+        document.querySelectorAll('.add-to-cart').forEach(button => {
+            button.addEventListener('click', function() {
+                const productId = this.getAttribute('data-id');
+                const productName = this.getAttribute('data-name');
+                const productPrice = parseFloat(this.getAttribute('data-price'));
+                const productImage = this.getAttribute('data-image');
+                
+                // Check if product already in cart
+                const existingItem = cart.find(item => item.id === productId);
+                
+                if (existingItem) {
+                    existingItem.quantity += 1;
+                } else {
+                    cart.push({
+                        id: productId,
+                        name: productName,
+                        price: productPrice,
+                        image: productImage,
+                        quantity: 1
+                    });
+                }
+                
+                updateCart();
+                cartSidebar.classList.remove('translate-x-full');
+                
+                // Show toast notification
+                showToast(`${productName} added to cart`);
+                
+                // Bounce cart count
+                const cartCount = document.getElementById('cart-count');
+                const mobileCartCount = document.getElementById('mobile-cart-count');
+                
+                cartCount.classList.add('bounce');
+                mobileCartCount.classList.add('bounce');
+                
+                setTimeout(() => {
+                    cartCount.classList.remove('bounce');
+                    mobileCartCount.classList.remove('bounce');
+                }, 500);
+            });
+        });
+    }
+    
+    // Update Cart
+    function updateCart() {
+        // Save to localStorage
+            localStorage.setItem('cart', JSON.stringify(cart));
+    
+    // Update cart count
+    const cartCount = cart.reduce((total, item) => total + item.quantity, 0);
+    document.getElementById('cart-count').textContent = cartCount;
+    document.getElementById('mobile-cart-count').textContent = cartCount;
+    
+    // Update cart items
+    cartItemsContainer.innerHTML = '';
+    
+    if (cart.length === 0) {
+        emptyCartMessage.classList.remove('hidden');
+        cartSummary.classList.add('hidden');
+    } else {
+        emptyCartMessage.classList.add('hidden');
+        cartSummary.classList.remove('hidden');
+        
+        let subtotal = 0;
+        
+        cart.forEach(item => {
+            subtotal += item.price * item.quantity;
+            
+            const cartItem = document.createElement('div');
+            cartItem.className = 'cart-item flex items-center border-b border-gray-200 pb-4';
+            cartItem.innerHTML = `
+                <img src="${item.image}" alt="${item.name}" class="w-16 h-16 object-cover rounded">
+                <div class="ml-4 flex-grow">
+                    <h4 class="font-medium">${item.name}</h4>
+                    <div class="flex justify-between items-center mt-1">
+                        <span>$${item.price.toFixed(2)}</span>
+                        <div class="flex items-center">
+                            <button class="decrease-quantity px-2 text-gray-500 hover:text-black" data-id="${item.id}">
+                                <i class="fas fa-minus text-xs"></i>
+                            </button>
+                            <span class="mx-2">${item.quantity}</span>
+                            <button class="increase-quantity px-2 text-gray-500 hover:text-black" data-id="${item.id}">
+                                <i class="fas fa-plus text-xs"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <button class="remove-item ml-4 text-gray-500 hover:text-red-500" data-id="${item.id}">
+                    <i class="fas fa-times"></i>
+                </button>
+            `;
+            
+            cartItemsContainer.appendChild(cartItem);
+        });
+        
+        // Update summary
+        cartSubtotal.textContent = `$${subtotal.toFixed(2)}`;
+        cartTotal.textContent = `$${(subtotal + 10).toFixed(2)}`; // Adding $10 shipping
+    }
+        
+
+
+        // Add event listeners to new buttons
+        document.querySelectorAll('.remove-item').forEach(button => {
+    button.addEventListener('click', function(e) {
+        e.stopPropagation(); // Add this line
+        const productId = this.getAttribute('data-id');
+        const productName = cart.find(item => item.id === productId)?.name;
+        cart = cart.filter(item => item.id !== productId);
+        updateCart();
+        showToast(`${productName} removed from cart`);
+    });
+});
+        
+        document.querySelectorAll('.decrease-quantity').forEach(button => {
+    button.addEventListener('click', function(e) {
+        e.stopPropagation(); // Add this line to stop event bubbling
+        const productId = this.getAttribute('data-id');
+        const item = cart.find(item => item.id === productId);
+        
+        if (item.quantity > 1) {
+            item.quantity -= 1;
+        } else {
+            cart = cart.filter(item => item.id !== productId);
+        }
+        
+        updateCart();
+    });
+});
+
+document.querySelectorAll('.increase-quantity').forEach(button => {
+    button.addEventListener('click', function(e) {
+        e.stopPropagation(); // Add this line to stop event bubbling
+        const productId = this.getAttribute('data-id');
+        const item = cart.find(item => item.id === productId);
+        item.quantity += 1;
+        updateCart();
+    });
+});
+
+    }
+    
+    // Cart Sidebar Toggle
+    cartButton.addEventListener('click', () => {
+        cartSidebar.classList.toggle('translate-x-full');
+        document.body.style.overflow = cartSidebar.classList.contains('translate-x-full') ? '' : 'hidden';
+    });
+    
+    mobileCartButton.addEventListener('click', () => {
+        cartSidebar.classList.remove('translate-x-full');
+        document.body.style.overflow = 'hidden';
+    });
+    
+    closeCart.addEventListener('click', () => {
+        cartSidebar.classList.add('translate-x-full');
+        document.body.style.overflow = '';
+    });
+    
+    // Close cart when clicking outside
+    document.addEventListener('click', (e) => {
+        if (!cartSidebar.contains(e.target) && 
+            !e.target.closest('#cart-button') && 
+            !e.target.closest('#mobile-cart-button')) {
+            cartSidebar.classList.add('translate-x-full');
+            document.body.style.overflow = '';
+        }
+    });
+    
+    // Checkout Modal
+    const checkoutModal = document.getElementById('checkout-modal');
+    const closeCheckout = document.getElementById('close-checkout');
+    const checkoutItems = document.getElementById('checkout-items');
+    const checkoutSubtotal = document.getElementById('checkout-subtotal');
+    const checkoutTotal = document.getElementById('checkout-total');
+    const placeOrder = document.getElementById('place-order');
+    const orderConfirmation = document.getElementById('order-confirmation');
+    const viewOrder = document.getElementById('view-order');
+    const continueShopping = document.getElementById('continue-shopping');
+    const checkoutForm = document.getElementById('checkout-form');
+    
+    checkoutButton.addEventListener('click', () => {
+        if (cart.length === 0) {
+            showToast('Your cart is empty');
+            return;
+        }
+        
+        // Update checkout items
+        checkoutItems.innerHTML = '';
+        let subtotal = 0;
+        
+        cart.forEach(item => {
+            subtotal += item.price * item.quantity;
+            
+            const checkoutItem = document.createElement('div');
+            checkoutItem.className = 'flex items-center justify-between';
+            checkoutItem.innerHTML = `
+                <div class="flex items-center">
+                    <img src="${item.image}" alt="${item.name}" class="w-12 h-12 object-cover rounded">
+                    <div class="ml-3">
+                        <h4 class="font-medium text-sm">${item.name}</h4>
+                        <p class="text-gray-500 text-sm">${item.quantity} x $${item.price.toFixed(2)}</p>
+                    </div>
+                </div>
+                <span class="font-medium">$${(item.price * item.quantity).toFixed(2)}</span>
+            `;
+            
+            checkoutItems.appendChild(checkoutItem);
+        });
+        
+        checkoutSubtotal.textContent = `$${subtotal.toFixed(2)}`;
+        checkoutTotal.textContent = `$${(subtotal + 10).toFixed(2)}`; // Adding $10 shipping
+        
+        // Show modal
+        cartSidebar.classList.add('translate-x-full');
+        checkoutModal.classList.remove('hidden');
+        document.body.style.overflow = 'hidden';
+    });
+    
+    closeCheckout.addEventListener('click', () => {
+        checkoutModal.classList.add('hidden');
+        document.body.style.overflow = '';
+    });
+    
+    // Form validation
+    checkoutForm.addEventListener('submit', function(e) {
+        e.preventDefault();
+        
+        let isValid = true;
+        
+        // Validate full name
+        const fullname = this.elements['fullname'];
+        if (!fullname.value.trim()) {
+            document.getElementById('fullname-error').style.display = 'block';
+            fullname.classList.add('input-error');
+            isValid = false;
+        } else {
+            document.getElementById('fullname-error').style.display = 'none';
+            fullname.classList.remove('input-error');
+        }
+        
+        // Validate phone
+        const phone = this.elements['phone'];
+        if (!phone.value.trim() || !/^\d+$/.test(phone.value)) {
+            document.getElementById('phone-error').style.display = 'block';
+            phone.classList.add('input-error');
+            isValid = false;
+        } else {
+            document.getElementById('phone-error').style.display = 'none';
+            phone.classList.remove('input-error');
+        }
+        
+        // Validate email
+        const email = this.elements['email'];
+        if (!email.value.trim() || !/^\S+@\S+\.\S+$/.test(email.value)) {
+            document.getElementById('email-error').style.display = 'block';
+            email.classList.add('input-error');
+            isValid = false;
+        } else {
+            document.getElementById('email-error').style.display = 'none';
+            email.classList.remove('input-error');
+        }
+        
+        // Validate address
+        const address = this.elements['address'];
+        if (!address.value.trim()) {
+            document.getElementById('address-error').style.display = 'block';
+            address.classList.add('input-error');
+            isValid = false;
+        } else {
+            document.getElementById('address-error').style.display = 'none';
+            address.classList.remove('input-error');
+        }
+        
+        // Validate city
+        const city = this.elements['city'];
+        if (!city.value.trim()) {
+            document.getElementById('city-error').style.display = 'block';
+            city.classList.add('input-error');
+            isValid = false;
+        } else {
+            document.getElementById('city-error').style.display = 'none';
+            city.classList.remove('input-error');
+        }
+        
+        // Validate country
+        const country = this.elements['country'];
+        if (!country.value.trim()) {
+            document.getElementById('country-error').style.display = 'block';
+            country.classList.add('input-error');
+            isValid = false;
+        } else {
+            document.getElementById('country-error').style.display = 'none';
+            country.classList.remove('input-error');
+        }
+        
+        if (isValid) {
+            // Generate random order number
+            const orderNumber = 'LS' + Math.floor(Math.random() * 100000);
+            document.getElementById('order-number').textContent = orderNumber;
+            
+            // Show confirmation
+            checkoutModal.classList.add('hidden');
+            orderConfirmation.classList.remove('hidden');
+            
+            // Clear cart
+            cart = [];
+            localStorage.removeItem('cart');
+            updateCart();
+        }
+    });
+    
+    // Order Confirmation Actions
+    viewOrder.addEventListener('click', () => {
+        orderConfirmation.classList.add('hidden');
+        document.body.style.overflow = '';
+        showToast('Order details would be shown here in a real application.');
+    });
+    
+    continueShopping.addEventListener('click', () => {
+        orderConfirmation.classList.add('hidden');
+        document.body.style.overflow = '';
+    });
+    
+    // Close modals when clicking outside
+    window.addEventListener('click', (e) => {
+        if (e.target === checkoutModal) {
+            checkoutModal.classList.add('hidden');
+            document.body.style.overflow = '';
+        }
+        if (e.target === orderConfirmation) {
+            orderConfirmation.classList.add('hidden');
+            document.body.style.overflow = '';
+        }
+    });
+
+    // Product details toggle
+    function setupShowMoreButtons() {
+        document.querySelectorAll('.show-more-btn').forEach(button => {
+            button.addEventListener('click', function(e) {
+                e.preventDefault();
+                const details = this.nextElementSibling;
+                details.classList.toggle('show');
+                this.classList.toggle('active');
+                
+                // Change text based on state
+                const span = this.querySelector('span');
+                span.textContent = details.classList.contains('show') ? 'Hide Details' : 'Show Details';
+            });
+        });
+    }
+
+    // Filter toggle functionality
+    document.querySelectorAll('.filter-toggle').forEach(toggle => {
+        toggle.addEventListener('click', () => {
+            const content = toggle.nextElementSibling;
+            const icon = toggle.querySelector('i');
+            
+            content.classList.toggle('hidden');
+            icon.classList.toggle('rotate-180');
+        });
+    });
+
+    // Price range filter
+    const priceMin = document.getElementById('price-min');
+    const priceMax = document.getElementById('price-max');
+    const priceMinDisplay = document.getElementById('price-min-display');
+    const priceMaxDisplay = document.getElementById('price-max-display');
+
+    priceMin.addEventListener('input', () => {
+        priceMinDisplay.textContent = priceMin.value;
+    });
+
+    priceMax.addEventListener('input', () => {
+        priceMaxDisplay.textContent = priceMax.value;
+    });
+
+    // Filter and sort functionality
+    const applyFilters = document.getElementById('apply-filters');
+    const resetFilters = document.getElementById('reset-filters');
+    const sortSelect = document.getElementById('sort-products');
+
+    // Sample product data
+    const products = [
+        { 
+            id: 1, 
+            name: "Chanel No. 5", 
+            price: 120, 
+            category: "women", 
+            size: 100, 
+            brand: "Chanel", 
+            scent: "Floral", 
+            isNew: true, 
+            isBestSeller: false,
+            description: "A timeless floral bouquet with sparkling top notes of citrus and the sensual warmth of vanilla.",
+            productType: "Eau de Parfum",
+            forGender: "Ladies",
+            application: "Neck, Wrists",
+            topNotes: "Bergamot, Lemon",
+            sustainability: "Glass bottle, Recyclable packaging",
+            image: "https://images.unsplash.com/photo-1594035910387-f355283d0e72?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=500&q=80"
+        },
+        { 
+            id: 2, 
+            name: "Dior Sauvage", 
+            price: 95, 
+            category: "men", 
+            size: 100, 
+            brand: "Dior", 
+            scent: "Fresh", 
+            isNew: false, 
+            isBestSeller: true,
+            description: "A radically fresh composition with Calabrian bergamot and spicy pepper notes.",
+            productType: "Eau de Toilette",
+            forGender: "Gentlemen",
+            application: "Chest, Neck",
+            topNotes: "Bergamot, Pepper",
+            sustainability: "Glass bottle, Refillable",
+            image: "https://images.unsplash.com/photo-1595425964073-9b8436f1d7a5?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=500&q=80"
+        },
+        { 
+            id: 3, 
+            name: "Tom Ford Black Orchid", 
+            price: 220, 
+            category: "women", 
+            size: 50, 
+            brand: "Tom Ford", 
+            scent: "Oriental", 
+            isNew: false, 
+            isBestSeller: false,
+            description: "A provocative blend of black truffle, ylang ylang and black orchid for a mysterious, sensual scent.",
+            productType: "Eau de Parfum",
+            forGender: "Unisex",
+            application: "Pulse Points",
+            topNotes: "Truffle, Black Orchid",
+            sustainability: "Glass bottle, Luxury packaging",
+            image: "https://images.unsplash.com/photo-1615634265067-24d7e1f5990a?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=500&q=80"
+        },
+        { 
+            id: 4, 
+            name: "YSL Black Opium", 
+            price: 88, 
+            category: "women", 
+            size: 50, 
+            brand: "Yves Saint Laurent", 
+            scent: "Oriental", 
+            isNew: false, 
+            isBestSeller: true,
+            description: "A bold, addictive fragrance with notes of coffee, vanilla and white flowers for a modern edge.",
+            productType: "Eau de Parfum",
+            forGender: "Ladies",
+            application: "Neck, Wrists",
+            topNotes: "Coffee, Pink Pepper",
+            sustainability: "Glass bottle, Recyclable",
+            image: "https://images.unsplash.com/photo-1547887538-e3a2f32cb1cf?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=500&q=80"
+        },
+        { 
+            id: 5, 
+            name: "Gucci Bloom", 
+            price: 105, 
+            category: "women", 
+            size: 100, 
+            brand: "Gucci", 
+            scent: "Floral", 
+            isNew: true, 
+            isBestSeller: false,
+            description: "A rich white floral fragrance inspired by the memory of a women's garden in bloom.",
+            productType: "Eau de Parfum",
+            forGender: "Ladies",
+            application: "Neck, Wrists",
+            topNotes: "Jasmine, Tuberose",
+            sustainability: "Glass bottle, Minimal packaging",
+            image: "https://images.unsplash.com/photo-1594035910387-f355283d0e72?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=500&q=80"
+        },
+        { 
+            id: 6, 
+            name: "Versace Eros", 
+            price: 75, 
+            category: "men", 
+            size: 100, 
+            brand: "Versace", 
+            scent: "Fresh", 
+            isNew: false, 
+            isBestSeller: false,
+            description: "A vibrant, intense fragrance with fresh mint, green apple and tonka bean notes.",
+            productType: "Eau de Toilette",
+            forGender: "Gentlemen",
+            application: "Chest, Neck",
+            topNotes: "Mint, Green Apple",
+            sustainability: "Glass bottle, Recyclable",
+            image: "https://images.unsplash.com/photo-1595425964073-9b8436f1d7a5?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=500&q=80"
+        }
+    ];
+
+    // Filter and sort products
+    function filterAndSortProducts() {
+        // Get selected categories
+        const selectedCategories = Array.from(document.querySelectorAll('.category-filter:checked')).map(el => el.value);
+        
+        // Get price range
+        const minPrice = parseInt(priceMin.value);
+        const maxPrice = parseInt(priceMax.value);
+        
+        // Get selected size
+        const sizeBtn = document.querySelector('.size-filter.bg-gold-500');
+        const selectedSize = sizeBtn ? parseInt(sizeBtn.dataset.size) : null;
+        
+        // Get selected brand
+        const selectedBrand = document.querySelector('.brand-filter').value;
+        
+        // Get selected scent
+        const selectedScent = document.querySelector('.scent-filter').value;
+        
+        // Get sort option
+        const sortOption = sortSelect.value;
+        
+        // Filter products
+        let filteredProducts = products.filter(product => {
+            const categoryMatch = selectedCategories.includes(product.category);
+            const priceMatch = product.price >= minPrice && product.price <= maxPrice;
+            const brandMatch = selectedBrand === 'all' || product.brand === selectedBrand;
+            const scentMatch = selectedScent === 'all' || product.scent === selectedScent;
+            const sizeMatch = !selectedSize || product.size === selectedSize;
+            
+            return categoryMatch && priceMatch && brandMatch && scentMatch && sizeMatch;
+        });
+        
+        // Sort products
+        switch(sortOption) {
+            case 'price-low':
+                filteredProducts.sort((a, b) => a.price - b.price);
+                break;
+            case 'price-high':
+                filteredProducts.sort((a, b) => b.price - a.price);
+                break;
+            case 'newest':
+                filteredProducts.sort((a, b) => (b.isNew ? 1 : 0) - (a.isNew ? 1 : 0));
+                break;
+            case 'best-selling':
+                filteredProducts.sort((a, b) => (b.isBestSeller ? 1 : 0) - (a.isBestSeller ? 1 : 0));
+                break;
+            default:
+                // Default sorting (featured)
+                break;
+        }
+        
+        // Update product display
+        updateProductDisplay(filteredProducts);
+    }
+
+    function updateProductDisplay(filteredProducts) {
+        const productGrid = document.querySelector('.grid.grid-cols-1.sm\\:grid-cols-2.lg\\:grid-cols-3.gap-6');
+        productGrid.innerHTML = '';
+        
+        if (filteredProducts.length === 0) {
+            productGrid.innerHTML = '<div class="col-span-3 text-center py-12"><p>No products match your filters.</p></div>';
+            return;
+        }
+        
+        filteredProducts.forEach(product => {
+            const productCard = document.createElement('div');
+            productCard.className = 'product-card bg-white rounded-lg overflow-hidden shadow-sm transition duration-300';
+            productCard.innerHTML = `
+                <div class="relative">
+                    <div class="product-image-container">
+                        <img src="${product.image}" alt="${product.name}" class="product-image w-full h-64 object-cover">
+                    </div>
+                    ${product.isNew ? '<div class="absolute top-0 left-0 bg-black text-white text-xs px-2 py-1">NEW</div>' : ''}
+                    ${product.isBestSeller ? '<div class="absolute top-0 left-0 bg-black text-white text-xs px-2 py-1">BESTSELLER</div>' : ''}
+                    ${product.price < 100 ? '<div class="sale-badge">SALE</div>' : ''}
+                </div>
+                <div class="p-4">
+                    <div class="flex justify-between items-start mb-2">
+                        <h3 class="font-bold">${product.name}</h3>
+                        <div class="flex items-center">
+                            <i class="fas fa-star text-yellow-400 text-xs"></i>
+                            <span class="text-xs ml-1">4.8</span>
+                        </div>
+                    </div>
+                    <p class="text-gray-600 text-sm mb-3">${product.scent}</p>
+                    <div class="flex justify-between items-center">
+                        <div>
+                            <span class="font-bold text-gold-600">$${product.price.toFixed(2)}</span>
+                            ${product.price < 100 ? `<span class="text-sm text-gray-400 line-through ml-2">$${(product.price * 1.2).toFixed(2)}</span>` : ''}
+                            <div class="text-xs text-gray-500 mt-1">${product.size}ml</div>
+                        </div>
+                        <button class="add-to-cart bg-black text-white p-2 rounded-full hover:bg-gray-800 transition" 
+                                data-id="${product.id}" 
+                                data-name="${product.name}" 
+                                data-price="${product.price}" 
+                                data-image="${product.image}">
+                            <i class="fas fa-plus"></i>
+                        </button>
+                    </div>
+                    
+                    <!-- Product Details Section -->
+                    <div class="mt-4">
+                        <button class="show-more-btn text-sm text-gray-600 hover:text-black flex items-center">
+                            <span>Show Details</span>
+                            <i class="fas fa-chevron-down text-xs ml-2"></i>
+                        </button>
+                        
+                        <div class="product-details text-sm text-gray-600 mt-2">
+                            <div class="grid grid-cols-1 gap-3">
+                                <div>
+                                    <span class="font-medium">Product Type:</span>
+                                    <p>${product.productType}</p>
+                                </div>
+                                <div>
+                                    <span class="font-medium">For:</span>
+                                    <p>${product.forGender}</p>
+                                </div>
+                                <div>
+                                    <span class="font-medium">Application:</span>
+                                    <p>${product.application}</p>
+                                </div>
+                                <div>
+                                    <span class="font-medium">Top Notes:</span>
+                                    <p>${product.topNotes}</p>
+                                </div>
+                            </div>
+                            <div class="mt-2">
+                                <span class="font-medium">Sustainability:</span>
+                                <p>${product.sustainability}</p>
+                            </div>
+                            <p class="mt-2">${product.description}</p>
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            productGrid.appendChild(productCard);
+        });
+        
+        // Update showing count
+        document.querySelector('.flex.justify-between.items-center.mb-8 div span').textContent = 
+            `Showing 1-${filteredProducts.length} of ${filteredProducts.length} products`;
+        
+    }
+
+    // Size filter buttons
+    document.querySelectorAll('.size-filter').forEach(button => {
+        button.addEventListener('click', function(e) {
+            e.preventDefault();
+            
+            // Toggle selection
+            if (this.classList.contains('bg-gold-500')) {
+                this.classList.remove('bg-gold-500', 'text-black');
+                this.classList.add('bg-gray-100', 'hover:bg-gold-500');
+            } else {
+                // Deselect all others
+                document.querySelectorAll('.size-filter').forEach(btn => {
+                    btn.classList.remove('bg-gold-500', 'text-black');
+                    btn.classList.add('bg-gray-100', 'hover:bg-gold-500');
+                });
+                // Select this one
+                this.classList.add('bg-gold-500', 'text-black');
+                this.classList.remove('bg-gray-100', 'hover:bg-gold-500');
+            }
+        });
+    });
+
+    // Apply filters button
+    applyFilters.addEventListener('click', filterAndSortProducts);
+
+    // Reset filters button
+    resetFilters.addEventListener('click', () => {
+        // Reset category checkboxes
+        document.querySelectorAll('.category-filter').forEach(checkbox => {
+            checkbox.checked = true;
+        });
+        
+        // Reset price range
+        priceMin.value = 20;
+        priceMax.value = 500;
+        priceMinDisplay.textContent = '20';
+        priceMaxDisplay.textContent = '500';
+        
+        // Reset size filter
+        document.querySelectorAll('.size-filter').forEach(btn => {
+            btn.classList.remove('bg-gold-500', 'text-black');
+            btn.classList.add('bg-gray-100', 'hover:bg-gold-500');
+        });
+        
+        // Reset brand and scent filters
+        document.querySelector('.brand-filter').value = 'all';
+        document.querySelector('.scent-filter').value = 'all';
+        
+        // Reset sort
+        sortSelect.value = 'featured';
+        
+        // Apply changes
+        filterAndSortProducts();
+    });
+
+    // Sort change handler
+    sortSelect.addEventListener('change', filterAndSortProducts);
+
+    // Initialize the page
+    function initPage() {
+        updateCart();
+        filterAndSortProducts();
+        setupAddToCartButtons();
+        setupShowMoreButtons();
+    }
+
+    initPage();
+});
+
+
+
+
+// WhatsApp Checkout Functionality
+document.getElementById('whatsapp-checkout-button').addEventListener('click', function() {
+    // Validate form first
+    const form = document.getElementById('checkout-form');
+    const formData = new FormData(form);
+    let isValid = true;
+
+    // Simple validation - you can keep your existing validation logic
+    const requiredFields = ['fullname', 'phone', 'email', 'address', 'city', 'country'];
+    requiredFields.forEach(field => {
+        if (!formData.get(field)) {
+            isValid = false;
+            document.getElementById(`${field}-error`).style.display = 'block';
+        } else {
+            document.getElementById(`${field}-error`).style.display = 'none';
+        }
+    });
+
+    if (!isValid) {
+        showToast('Please fill all required fields');
+        return;
+    }
+
+    // Build WhatsApp message
+    let whatsappMessage = `🛒 *New Order Request* 🛒\n\n`;
+    whatsappMessage += `*Customer Details:*\n`;
+    whatsappMessage += `👤 Name: ${formData.get('fullname')}\n`;
+    whatsappMessage += `📞 Phone: ${formData.get('phone')}\n`;
+    whatsappMessage += `📧 Email: ${formData.get('email')}\n\n`;
+    
+    whatsappMessage += `*Delivery Address:*\n`;
+    whatsappMessage += `📍 ${formData.get('address')}\n`;
+    whatsappMessage += `🏙️ ${formData.get('city')}, ${formData.get('country')}\n`;
+    if (formData.get('gps')) {
+        whatsappMessage += `🗺️ GPS: ${formData.get('gps')}\n`;
+    }
+    whatsappMessage += `\n`;
+
+    whatsappMessage += `*Order Summary:*\n`;
+    whatsappMessage += '----------------------\n';
+    
+    // Add cart items
+    cart.forEach(item => {
+        whatsappMessage += `${item.quantity}x ${item.name} - $${item.price.toFixed(2)}\n`;
+    });
+    
+    // Calculate total
+    const subtotal = cart.reduce((total, item) => total + (item.price * item.quantity), 0);
+    const total = subtotal + 10; // $10 shipping
+    
+    whatsappMessage += '----------------------\n';
+    whatsappMessage += `💰 *Total: $${total.toFixed(2)}* (includes $10 shipping)\n\n`;
+    whatsappMessage += `💳 *Payment Method:* Cash on Delivery\n\n`;
+    whatsappMessage += `Please confirm this order and provide estimated delivery time. Thank you!`;
+
+    // Replace with your WhatsApp number (remove any spaces or special characters)
+    const whatsappNumber = '233245332299'; // Example Ghana number
+    
+    // Encode message for URL
+    const encodedMessage = encodeURIComponent(whatsappMessage);
+    
+    // Open WhatsApp with the pre-filled message
+    window.open(`https://wa.me/${whatsappNumber}?text=${encodedMessage}`, '_blank');
+    
+    // Close the checkout modal
+    checkoutModal.classList.add('hidden');
+    document.body.style.overflow = '';
+});
+    </script>
+</body>
+</html>
