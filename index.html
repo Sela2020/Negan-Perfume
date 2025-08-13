@@ -224,6 +224,107 @@
     margin-bottom: 1.5rem;
 }
 
+
+
+/* Mobile-specific styles */
+@media (max-width: 768px) {
+    /* Stack filters above products on mobile */
+    .flex.flex-col.md\:flex-row.gap-8 {
+        flex-direction: column;
+    }
+    
+    /* Make filters full width on mobile */
+    .w-full.md\:w-1\/4 {
+        width: 100%;
+    }
+    
+    /* Make products full width on mobile */
+    .w-full.md\:w-3\/4 {
+        width: 100%;
+    }
+    
+    /* 2-column product grid on mobile */
+    .grid.grid-cols-1.sm\:grid-cols-2.lg\:grid-cols-3.gap-6 {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+    
+    /* Adjust product card sizing for mobile */
+    .product-card {
+        min-width: 0; /* Fix flexbox issues */
+    }
+    
+    /* Make product images smaller on mobile */
+    .product-image {
+        height: 180px;
+    }
+    
+    /* Adjust filter section for mobile */
+    .bg-white.p-6.rounded-lg.shadow-sm.sticky.top-24 {
+        position: static;
+        margin-bottom: 1rem;
+    }
+    
+    /* Mobile filter toggle improvements */
+    .filter-toggle {
+        padding: 12px 0;
+    }
+    
+    /* Adjust product details for mobile */
+    .product-details {
+        font-size: 0.875rem;
+    }
+}
+
+/* For very small screens (like iPhone) */
+@media (max-width: 380px) {
+    /* Make product images even smaller */
+    .product-image {
+        height: 150px;
+    }
+    
+    /* Adjust font sizes */
+    .product-card h3 {
+        font-size: 0.875rem;
+    }
+    
+    .product-card p.text-gray-600 {
+        font-size: 0.75rem;
+    }
+    
+    /* Price font size */
+    .font-bold.text-gold-600 {
+        font-size: 0.875rem;
+    }
+}
+
+
+
+
+
+
+/* Add this to your existing styles */
+/* Make sure buttons are tappable on mobile */
+button, .add-to-cart {
+    min-width: 44px;
+    min-height: 44px;
+}
+
+/* Improve form input sizes on mobile */
+input, select, textarea {
+    font-size: 16px; /* Prevents iOS zooming */
+}
+
+/* Adjust cart sidebar for mobile */
+@media (max-width: 768px) {
+    #cart-sidebar {
+        width: 100%;
+    }
+}
+
+/* Make sure text is readable on small screens */
+body {
+    -webkit-text-size-adjust: 100%;
+}
     </style>
 </head>
 <body class="bg-gray-50">
@@ -439,6 +540,13 @@
                         <button id="apply-filters" class="w-full bg-black text-white py-2 rounded hover:bg-gray-800 transition">Apply Filters</button>
                     </div>
                 </div>
+                <!-- Add this above the products section -->
+<div class="md:hidden mb-4">
+    <button id="mobile-filter-toggle" class="w-full bg-black text-white py-2 px-4 rounded flex justify-between items-center">
+        <span>Filters</span>
+        <i class="fas fa-filter"></i>
+    </button>
+</div>
                 
                 <!-- Products -->
                 <div class="w-full md:w-3/4">
@@ -2207,6 +2315,36 @@ document.getElementById('whatsapp-checkout-button').addEventListener('click', fu
     checkoutModal.classList.add('hidden');
     document.body.style.overflow = '';
 });
+
+
+
+
+
+
+
+// Mobile filter toggle functionality
+const mobileFilterToggle = document.getElementById('mobile-filter-toggle');
+const filterSection = document.querySelector('.w-full.md\\:w-1\\/4');
+
+if (mobileFilterToggle && filterSection) {
+    mobileFilterToggle.addEventListener('click', () => {
+        filterSection.classList.toggle('hidden');
+    });
+    
+    // Hide filters by default on mobile
+    if (window.innerWidth <= 768) {
+        filterSection.classList.add('hidden');
+    }
+    
+    // Update on window resize
+    window.addEventListener('resize', () => {
+        if (window.innerWidth <= 768) {
+            filterSection.classList.add('hidden');
+        } else {
+            filterSection.classList.remove('hidden');
+        }
+    });
+}
     </script>
 </body>
 </html>
