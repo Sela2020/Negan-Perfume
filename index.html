@@ -284,16 +284,25 @@
     
     /* Adjust font sizes */
     .product-card h3 {
-        font-size: 0.875rem;
+        font-size: 0.675rem;
     }
     
-    .product-card p.text-gray-600 {
-        font-size: 0.75rem;
+    .product-card p.text-gray-600, .product-card .text-gray-500 {
+        font-size: 0.575rem;
     }
+
     
     /* Price font size */
     .font-bold.text-gold-600 {
-        font-size: 0.875rem;
+        font-size: 0.675rem;
+    }
+
+    .product-details p, .product-details .font-medium{
+        font-size: 0.55rem;
+    }
+
+    .product-details .font-medium{
+        color: rgb(32, 32, 32);
     }
 }
 
@@ -2022,6 +2031,24 @@ document.querySelectorAll('.increase-quantity').forEach(button => {
             image: "https://images.asambeauty.com/media/catalog/product/cache/8cc4f7aabb1d2666af4c21eb8e66459e/1/-/1-44594-p_generated_webp.webp"
         },
         { 
+            id: 6, 
+            name: "Versace Eros", 
+            price: 75, 
+            category: "men", 
+            size: 100, 
+            brand: "Versace", 
+            scent: "Fresh", 
+            isNew: false, 
+            isBestSeller: false,
+            description: "A vibrant, intense fragrance with fresh mint, green apple and tonka bean notes.",
+            productType: "Eau de Toilette",
+            forGender: "Gentlemen",
+            application: "Chest, Neck",
+            topNotes: "Mint, Green Apple",
+            sustainability: "Glass bottle, Recyclable",
+            image: "https://images.asambeauty.com/media/catalog/product/cache/8cc4f7aabb1d2666af4c21eb8e66459e/4/3/43329-z3_generated_webp.webp"
+        },
+         { 
             id: 6, 
             name: "Versace Eros", 
             price: 75, 
